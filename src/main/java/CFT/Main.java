@@ -1,9 +1,13 @@
 package CFT;
 
-public class Test {
+import java.util.ArrayList;
+import java.util.List;
+
+public class Main {
     public static void main(String[] args) {
         Starter starter = new Starter();
         starter.fillStarter();
-        starter.createFiles(starter.getNameIn());
+        starter.createPaths();
+        starter.createFiles();
     }
 }

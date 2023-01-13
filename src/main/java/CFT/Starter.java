@@ -1,10 +1,9 @@
 package CFT;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 
 
@@ -13,6 +12,8 @@ public class Starter {
     private String type;
     private String nameOut;
     private ArrayList<String> nameIn = new ArrayList<>();
+    private ArrayList<String> pathsIn = new ArrayList<>();
+    private String pathOut;
 
 
     public Starter() {
@@ -48,6 +49,22 @@ public class Starter {
 
     public void setNameIn(ArrayList<String> nameIn) {
         this.nameIn = nameIn;
+    }
+
+    public ArrayList<String> getPathsIn() {
+        return pathsIn;
+    }
+
+    public void setPathsIn(ArrayList<String> pathsIn) {
+        this.pathsIn = pathsIn;
+    }
+
+    public String getPathOut() {
+        return pathOut;
+    }
+
+    public void setPathOut(String pathOut) {
+        this.pathOut = pathOut;
     }
 
     public void fillStarter() {
@@ -90,27 +107,75 @@ public class Starter {
 
     }
 
-    public void createFiles(ArrayList<String> names) {
-        try {
-            for (String s : names) {
-                String str = "C:\\Users\\Anna\\OneDrive\\Рабочий стол\\Java\\Shift\\Shift\\" + s;
-                Path path = Path.of(str).toAbsolutePath();
-                Files.createFile(path);
-            }
-        } catch (IOException e) {
-            System.out.println("Что то не так с входными именами"); // TODO что за искоючение?
+
+    public void createPaths() {
+
+        for (int i = 0; i< getNameIn().size(); i++) {
+            String strIn = "C:\\Users\\Anna\\OneDrive\\Рабочий стол\\Java\\Shift\\Shift\\" + getNameIn().get(i);
+            pathsIn.add(strIn);
         }
 
-        String str = "C:\\Users\\Anna\\OneDrive\\Рабочий стол\\Java\\Shift\\Shift\\" + getNameOut();
-        Path path = Path.of(str).toAbsolutePath();
-        try {
-            Files.createFile(path);
-        } catch (IOException e) {
-            System.out.println("Что то не так с выходными именами"); // TODO что за искоючение?
+        pathOut = "C:\\Users\\Anna\\OneDrive\\Рабочий стол\\Java\\Shift\\Shift\\" + getNameOut();
+
+    }
+
+
+
+    public void createFiles() {
+
+            // Поиск/создание выходного файла
+            File fileOutput = new File(pathOut);
+            try {
+                if(fileOutput.createNewFile()){
+                    System.out.println("Файл "+nameOut+" успешно создан");
+                } else {
+                    System.out.println("Файл " + nameOut + " уже существует");
+
+                    if (fileOutput.canWrite()) {
+                        System.out.println("Доступ на запись в файл есть. Информация будет перезаписана");
+                    } else {
+                        System.out.println("Доступ на запись в файл отсутствует");
+                        pathsIn.clear();
+                        System.exit(200);
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            // Поиск входных файлов
+            for (int i = 0; i < pathsIn.size();) {
+                String filePathIn = pathsIn.get(i);
+                File fileInput = new File(filePathIn);
+
+                try {
+                    if(fileInput.createNewFile()){
+                        System.out.println("Файл "+nameIn.get(i)+" успешно создан");
+                    } else {
+                        
+                        if (fileInput.canRead()) {
+                            System.out.println("Доступ на чтение из файла есть");
+                            i++;
+                        } else {
+                            System.out.println("Доступ на чтение из файла отсутствует. Файл будет удалён из списка");
+                            pathsIn.remove(i);
+                        }
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if (pathsIn.size() < 2) {
+                System.out.println("Не обнаружен минимальный набор доступных входных и выходных данных (2 и более файла)");
+                pathsIn.clear();
+                System.exit(201);
+            }
+
         }
 
     }
-}
+
 
 
 
