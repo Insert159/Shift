@@ -9,5 +9,6 @@ public class Main {
         starter.fillStarter();
         starter.createPaths();
         starter.createFiles();
+        starter.fillTheFiles();
     }
 }
