@@ -1,10 +1,13 @@
 package CFT;
 
 import java.io.*;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 
 public class Starter {
@@ -14,8 +17,9 @@ public class Starter {
     private ArrayList<String> fileNameIn = new ArrayList<>();
     private ArrayList<String> pathsIn = new ArrayList<>();
     private String pathOut;
-    private static ArrayList<String> filesIO = new ArrayList<>();
-    static ArrayList<ArrayList<String>> data = new ArrayList<>();
+    private ArrayList<String> filesIO = new ArrayList<>();
+    private ArrayList<ArrayList<String>> filesWithData = new ArrayList<>();
+    Scanner scanner;
 
     public Starter() {
     }
@@ -69,20 +73,20 @@ public class Starter {
         this.pathOut = pathOut;
     }
 
-    public static ArrayList<String> getFilesIO() {
+    public ArrayList<String> getFilesIO() {
         return filesIO;
     }
 
-    public static void setFilesIO(ArrayList<String> filesIO) {
-        Starter.filesIO = filesIO;
+    public void setFilesIO(ArrayList<String> filesIO) {
+        this.filesIO = filesIO;
     }
 
-    public static ArrayList<ArrayList<String>> getData() {
-        return data;
+    public ArrayList<ArrayList<String>> getFilesWithData() {
+        return filesWithData;
     }
 
-    public static void setData(ArrayList<ArrayList<String>> data) {
-        Starter.data = data;
+    public void setFilesWithData(ArrayList<ArrayList<String>> filesWithData) {
+        this.filesWithData = filesWithData;
     }
 
     //TODO убери лишние геттеры\сеттеры
@@ -93,7 +97,7 @@ public class Starter {
         System.out.println("Введите режим сортировки (\"a\" - возрастающая, по умолчанию; \"d\" - убывающая)");
         try {
             String marker = bufferedReader.readLine();
-            if (marker.equals("d")) {
+            if (marker.equals("a")) {
                 setSort(true);
             }
 
@@ -237,6 +241,7 @@ public class Starter {
                                 break; //TODO убери break
                             }
                             getFilesIO().add(str);
+
                         } else {
                             System.out.println("Введен неверный формат типов данных");
                         }
@@ -254,6 +259,180 @@ public class Starter {
         for (String s: getFilesIO()) {
             System.out.println(s);
 
+        }
+    }
+
+
+
+
+
+    public void readFiles() {
+        for (String file : getPathsIn()) {
+            ArrayList<String> sortableDataFromFile = new ArrayList<>();
+
+
+            try {
+                FileInputStream inputStream = new FileInputStream(file);
+                scanner = new Scanner(inputStream, "cp1251");
+            }
+            catch (FileNotFoundException e) {
+                System.out.println("Не удалось найти файл.");
+            }
+
+            while (scanner.hasNextLine()) {
+                String data = scanner.nextLine();
+
+                if (data == null) continue;
+
+                sortableDataFromFile.add(data);
+            }
+
+            updatingSortedDataInFile(sortableDataFromFile);
+
+            getFilesWithData().add(sortableDataFromFile);
+        }
+
+    }
+
+    private void updatingSortedDataInFile(List<String> file) {
+        if (file.size() < 2) return;
+
+        for (int index = 0; index < file.size() - 1; index++) {
+            if (checkSortedDataInFile(file, index)) {
+                System.out.println("Данные в файле отсортированы неверно. " +
+                        "Файл не будет участвовать в сортировке.");
+                while (index < file.size()) {
+                    file.remove(index);
+                }
+                return;
+            }
+        }
+    }
+
+    private boolean checkSortedDataInFile(List<String> file, int currentIndex) {
+        try {
+            if (getType().equalsIgnoreCase("s")) {
+                int numSign = file.get(currentIndex).compareTo(file.get(currentIndex + 1));
+                if (isSort()) {
+                    if (numSign >= 0) return true;
+                } else {
+                    if (numSign < 0) return true;
+                }
+            } else {
+                int currentValue = Integer.parseInt(file.get(currentIndex));
+                int nextValue = Integer.parseInt(file.get(currentIndex + 1));
+
+                if (isSort()) {
+                    if (currentValue > nextValue) return true;
+                } else {
+                    if (currentValue < nextValue) return true;
+                }
+            }
+        }
+        catch (IndexOutOfBoundsException e) {
+            System.out.println("Выход за пределы массива. " +
+                    "Указан неверный индекс для списка с данными.");
+            System.exit(203);
+        }
+        return false;
+    }
+
+
+    public void mergeSorting() {
+        while (filesWithData.size() > 1) {
+            int sizeDataFromFiles = filesWithData.size();
+            ArrayList<String> tempData = new ArrayList<>();
+
+            while (filesWithData.get(sizeDataFromFiles - 1).size() > 0 && filesWithData.get(sizeDataFromFiles - 2).size() > 0) {
+                String value1 = filesWithData.get(sizeDataFromFiles - 1).get(0);
+                String value2 = filesWithData.get(sizeDataFromFiles - 2).get(0);
+
+                if (getType().equalsIgnoreCase("s")) {
+                    int numSign = value1.compareTo(value2);
+
+                    if (isSort()) {
+                        if (numSign <= 0) {
+                            tempData.add(value1);
+                            filesWithData.get(sizeDataFromFiles - 1).remove(0);
+                        }
+                        else {
+                            tempData.add(value2);
+                            filesWithData.get(sizeDataFromFiles - 2).remove(0);
+                        }
+                    }
+                    else {
+                        if (numSign >= 0) {
+                            tempData.add(value1);
+                            filesWithData.get(sizeDataFromFiles - 1).remove(0);
+                        }
+                        else {
+                            tempData.add(value2);
+                            filesWithData.get(sizeDataFromFiles - 2).remove(0);
+                        }
+                    }
+                }
+                else {
+                    int number1 = Integer.parseInt(value1);
+                    int number2 = Integer.parseInt(value2);
+
+                    if (isSort()) {
+                        if (number1 <= number2) {
+                            tempData.add(value1);
+                            filesWithData.get(sizeDataFromFiles - 1).remove(0);
+                        }
+                        else {
+                            tempData.add(value2);
+                            filesWithData.get(sizeDataFromFiles - 2).remove(0);
+                        }
+                    }
+                    else {
+                        if (number1 >= number2) {
+                            tempData.add(value1);
+                            filesWithData.get(sizeDataFromFiles - 1).remove(0);
+                        }
+                        else {
+                            tempData.add(value2);
+                            filesWithData.get(sizeDataFromFiles - 2).remove(0);
+                        }
+                    }
+                }
+            }
+
+            while (filesWithData.get(sizeDataFromFiles - 1).size() > 0) {
+                tempData.add(filesWithData.get(sizeDataFromFiles - 1).get(0));
+                filesWithData.get(sizeDataFromFiles - 1).remove(0);
+            }
+
+            while (filesWithData.get(sizeDataFromFiles - 2).size() > 0) {
+                tempData.add(filesWithData.get(sizeDataFromFiles - 2).get(0));
+                filesWithData.get(sizeDataFromFiles - 2).remove(0);
+            }
+
+            filesWithData.set(sizeDataFromFiles - 2, tempData);
+            filesWithData.remove(sizeDataFromFiles - 1);
+        }
+
+        writeFile(filesWithData.get(0), fileNameOut);
+
+        System.out.println("Сортировка слиянием произведена успешно.");
+    }
+
+
+    private void writeFile(List<String> sortedData, String fileName) {
+        File file = new File(fileName);
+
+        try {
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
+            for (String data : sortedData) {
+                fileOutputStream.write(data.getBytes(Charset.forName("cp1251")), 0, data.length());
+                fileOutputStream.write("\n".getBytes());
+            }
+        }
+        catch (FileNotFoundException e) {
+            System.out.println("Не удалось найти файл.");
+        }
+        catch (IOException e) {
+            System.out.println("Не удалось произвести запись в файл.");
         }
     }
 }

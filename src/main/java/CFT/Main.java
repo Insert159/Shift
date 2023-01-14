@@ -12,5 +12,9 @@ public class Main {
         starter.fillTheFiles();
         starter.readTheFiles();
         starter.print();
+        starter.readFiles();
+        starter.mergeSorting();
+
+
     }
 }
