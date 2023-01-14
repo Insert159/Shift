@@ -10,5 +10,7 @@ public class Main {
         starter.createPaths();
         starter.createFiles();
         starter.fillTheFiles();
+        starter.readTheFiles();
+        starter.print();
     }
 }

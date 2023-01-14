@@ -10,14 +10,16 @@ import java.util.ArrayList;
 public class Starter {
     private boolean sort;
     private String type;
-    private String nameOut;
-    private ArrayList<String> nameIn = new ArrayList<>();
+    private String fileNameOut;
+    private ArrayList<String> fileNameIn = new ArrayList<>();
     private ArrayList<String> pathsIn = new ArrayList<>();
     private String pathOut;
-
+    private static ArrayList<String> filesIO = new ArrayList<>();
+    static ArrayList<ArrayList<String>> data = new ArrayList<>();
 
     public Starter() {
     }
+
 
     public boolean isSort() {
         return sort;
@@ -35,20 +37,20 @@ public class Starter {
         this.type = type;
     }
 
-    public String getNameOut() {
-        return nameOut;
+    public String getFileNameOut() {
+        return fileNameOut;
     }
 
-    public void setNameOut(String nameOut) {
-        this.nameOut = nameOut;
+    public void setFileNameOut(String fileNameOut) {
+        this.fileNameOut = fileNameOut;
     }
 
-    public ArrayList<String> getNameIn() {
-        return nameIn;
+    public ArrayList<String> getFileNameIn() {
+        return fileNameIn;
     }
 
-    public void setNameIn(ArrayList<String> nameIn) {
-        this.nameIn = nameIn;
+    public void setFileNameIn(ArrayList<String> fileNameIn) {
+        this.fileNameIn = fileNameIn;
     }
 
     public ArrayList<String> getPathsIn() {
@@ -66,6 +68,25 @@ public class Starter {
     public void setPathOut(String pathOut) {
         this.pathOut = pathOut;
     }
+
+    public static ArrayList<String> getFilesIO() {
+        return filesIO;
+    }
+
+    public static void setFilesIO(ArrayList<String> filesIO) {
+        Starter.filesIO = filesIO;
+    }
+
+    public static ArrayList<ArrayList<String>> getData() {
+        return data;
+    }
+
+    public static void setData(ArrayList<ArrayList<String>> data) {
+        Starter.data = data;
+    }
+
+    //TODO убери лишние геттеры\сеттеры
+
 
     public void fillStarter() {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
@@ -89,7 +110,7 @@ public class Starter {
 
         System.out.println("Введите имя выходного файла");
         try {
-            nameOut = bufferedReader.readLine();
+            fileNameOut = bufferedReader.readLine();
         } catch (IOException e) {
             System.out.println("Не корретный формат ввода");
         }
@@ -98,10 +119,10 @@ public class Starter {
         try {
             do {
                 String s = bufferedReader.readLine();
-                nameIn.add(s);
+                fileNameIn.add(s);
             }
-            while (!nameIn.contains("Enter"));
-            nameIn.remove("Enter");
+            while (!fileNameIn.contains("Enter"));
+            fileNameIn.remove("Enter");
         } catch (IOException e) {
             System.out.println("Не корретный формат ввода");
         }
@@ -111,12 +132,12 @@ public class Starter {
 
     public void createPaths() {
 
-        for (int i = 0; i < getNameIn().size(); i++) {
-            String strIn = "C:\\Users\\Anna\\OneDrive\\Рабочий стол\\Java\\Shift\\Shift\\" + getNameIn().get(i);
+        for (int i = 0; i < getFileNameIn().size(); i++) {
+            String strIn = "C:\\Users\\Anna\\OneDrive\\Рабочий стол\\Java\\Shift\\Shift\\" + getFileNameIn().get(i);
             pathsIn.add(strIn);
         }
 
-        pathOut = "C:\\Users\\Anna\\OneDrive\\Рабочий стол\\Java\\Shift\\Shift\\" + getNameOut();
+        pathOut = "C:\\Users\\Anna\\OneDrive\\Рабочий стол\\Java\\Shift\\Shift\\" + getFileNameOut();
 
     }
 
@@ -127,9 +148,9 @@ public class Starter {
         File fileOutput = new File(pathOut);
         try {
             if (fileOutput.createNewFile()) {
-                System.out.println("Файл " + nameOut + " успешно создан");
+                System.out.println("Файл " + fileNameOut + " успешно создан");
             } else {
-                System.out.println("Файл " + nameOut + " уже существует");
+                System.out.println("Файл " + fileNameOut + " уже существует");
 
                 if (fileOutput.canWrite()) {
                     System.out.println("Доступ на запись в файл есть. Информация будет перезаписана");
@@ -150,7 +171,7 @@ public class Starter {
 
             try {
                 if (fileInput.createNewFile()) {
-                    System.out.println("Файл " + nameIn.get(i) + " успешно создан");
+                    System.out.println("Файл " + fileNameIn.get(i) + " успешно создан");
                 } else {
 
                     if (fileInput.canRead()) {
@@ -178,19 +199,63 @@ public class Starter {
         System.out.println("Введите входные данные:");
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
         for (String path : pathsIn) {
-            try (BufferedWriter bufferedWriter = Files.newBufferedWriter(Path.of(path), StandardCharsets.UTF_8))
-            {
+            try (BufferedWriter bufferedWriter = Files.newBufferedWriter(Path.of(path), StandardCharsets.UTF_8)) {
                 String line;
                 while (!"quit".equalsIgnoreCase(line = bufferedReader.readLine())) {
                     bufferedWriter.append(line);
                     bufferedWriter.append("\n");
                 }
             } catch (IOException e) {
-                System.err.println("Can't write to file with path " + path);
+                System.err.println("Нет доступа к пути " + path);
             }
         }
     }
 
+    public void readTheFiles() {
+        System.out.println("Считываем данные с входных файлов...");
+        for (int i = 0; i < pathsIn.size(); i++) {
+            {
+                try (BufferedReader reader = new BufferedReader(new FileReader(pathsIn.get(i)))) {
+                    while (reader.ready()) {
+                        if (getType().equalsIgnoreCase("i")) {
+                            String str = reader.readLine();
+                            try {
+                                int result = Integer.parseInt(str);
+                                getFilesIO().add(str);
+                            } catch (NumberFormatException e) {
+                                System.out.println("Найдены недопустимые данные: " + str);
+                                System.out.println("Данные файла " + getFileNameIn().get(i) +
+                                        " отсортированы не будут");
+                                break; //TODO убери break
+                            }
+                        } else if (getType().equalsIgnoreCase("s")) {
+                            String str = reader.readLine();
+                            if (str.indexOf(" ") > 0) {
+                                System.out.println("Найдены недопустимые данные: " + str);
+                                System.out.println("Данные файла " + getFileNameIn().get(i) +
+                                        " отсортированы не будут");
+                                break; //TODO убери break
+                            }
+                            getFilesIO().add(str);
+                        } else {
+                            System.out.println("Введен неверный формат типов данных");
+                        }
+                    }
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public void print(){
+        for (String s: getFilesIO()) {
+            System.out.println(s);
+
+        }
+    }
 }
 
 
