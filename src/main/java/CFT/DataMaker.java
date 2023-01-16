@@ -4,8 +4,17 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 
+
+/**
+ * Класс DataMaker создает входящие/исходящие файлы, пути их сохранения,
+ * а также заполняет исходящие файлы данными через консоль
+ */
 public class DataMaker {
+
+    // Метод createPaths() создает пути, по которым создадутся файлы. В конце вызывет
+    // метод createFiles для создания файлов
     public static void createPaths() {
 
         for (int i = 0; i < Starter.getFileNameIn().size(); i++) {
@@ -15,19 +24,21 @@ public class DataMaker {
 
         Starter.setPathOut("C:\\Users\\Anna\\OneDrive\\Рабочий стол\\Java\\Shift\\Shift\\" + Starter.getFileNameOut());
         // TODO сделай универсальные пути
+
+        createFiles();
     }
 
-
+    // Метод createFiles() создает файлы для чтения и записи. Вконце вызывает
+// метод fillTheFiles(), для заполнения исходящих файлов данными
     public static void createFiles() {
 
-        // Поиск/создание выходного файла
+        // Создание/поиск выходного файла и проверка на запись в файл
         File fileOutput = new File(Starter.getPathOut());
         try {
             if (fileOutput.createNewFile()) {
                 System.out.println("Файл " + Starter.getFileNameOut() + " успешно создан");
             } else {
                 System.out.println("Файл " + Starter.getFileNameOut() + " уже существует");
-
                 if (fileOutput.canWrite()) {
                     System.out.println("Доступ на запись в файл есть. Информация будет перезаписана");
                 } else {
@@ -37,17 +48,17 @@ public class DataMaker {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Файл не найден");
         }
 
-        // Поиск входных файлов
+        // Создание/поиск входного файла и проверка на чтение из файла
         for (int i = 0; i < Starter.getPathsIn().size(); ) {
             String filePathIn = Starter.getPathsIn().get(i);
             File fileInput = new File(filePathIn);
 
             try {
                 if (fileInput.createNewFile()) {
-                    System.out.println("Файл " +  Starter.getFileNameIn().get(i) + " успешно создан");
+                    System.out.println("Файл " + Starter.getFileNameIn().get(i) + " успешно создан");
                 } else {
 
                     if (fileInput.canRead()) {
@@ -62,15 +73,16 @@ public class DataMaker {
                 e.printStackTrace();
             }
         }
-
         if (Starter.getPathsIn().size() < 2) {
-            System.out.println("Не обнаружен минимальный набор доступных входных и выходных данных (2 и более файла)");
+            System.out.println("Минимальный набор доступных входных " +
+                    "данных - 2 и более файла");
             Starter.getPathsIn().clear();
             System.exit(201);
         }
     }
 
-
+    // Метод fillTheFiles() наполняет исходящие файлы данными, принимая @param PathsIn
+// коллекцию путей исходящих файлоав
     public static void fillTheFiles() {
         System.out.println("Введите входные данные:");
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
@@ -82,8 +94,9 @@ public class DataMaker {
                     bufferedWriter.append("\n");
                 }
             } catch (IOException e) {
-                System.err.println("Нет доступа к пути " + path); //TODO больше коментарий
+                System.err.println("Нет доступа к пути " + path); 
             }
         }
     }
 }
+

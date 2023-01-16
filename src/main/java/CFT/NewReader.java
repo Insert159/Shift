@@ -4,18 +4,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class NewReader extends Reader {
-    public static BufferedReader br;  //TODO избавься от сканнера
-    @Override
-    public int read(char[] cbuf, int off, int len) throws IOException {
-        return 0;
-    }
-
-    @Override
-    public void close() throws IOException {
-    }
-
-
+public class NewReader {
 
 // TODO тут что, 2 одинаковых метода?
 
@@ -55,11 +44,13 @@ public class NewReader extends Reader {
                     e.printStackTrace();
                 }
             }
+            Checker.updatingSortedDataInFile(Starter.getFilesIO());
+            Starter.getFilesWithData().add(Starter.getFilesIO());
         }
     }
 
 
-
+/*
     public static void readFiles() {
         for (String file : Starter.getPathsIn()) {
             ArrayList<String> sortableDataFromFile = new ArrayList<>();
@@ -99,4 +90,5 @@ public class NewReader extends Reader {
         }
 
     }
+*/
 }

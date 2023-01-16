@@ -4,18 +4,8 @@ import java.io.*;
 import java.nio.charset.Charset;
 import java.util.List;
 
-public class NewWriter extends Writer {
-    @Override
-    public void write(char[] cbuf, int off, int len) throws IOException {
-    }
+public class NewWriter {
 
-    @Override
-    public void flush() throws IOException {
-    }
-
-    @Override
-    public void close() throws IOException {
-    }
 
     //TODO переопредели методы
 
