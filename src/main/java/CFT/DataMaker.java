@@ -25,7 +25,6 @@ public class DataMaker {
         Starter.setPathOut("C:\\Users\\Anna\\OneDrive\\Рабочий стол\\Java\\Shift\\Shift\\" + Starter.getFileNameOut());
         // TODO сделай универсальные пути
 
-        createFiles();
     }
 
     // Метод createFiles() создает файлы для чтения и записи. Вконце вызывает

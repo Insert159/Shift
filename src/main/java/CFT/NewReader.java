@@ -1,13 +1,14 @@
 package CFT;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Scanner;
 
+
+
+/**
+Класс NewReader считывает данные с входных вайлов и
+ записывает их в коллекцию filesIO
+ */
 public class NewReader {
-
-// TODO тут что, 2 одинаковых метода?
-
 
 
     public static void readTheFiles() {
@@ -48,47 +49,4 @@ public class NewReader {
             Starter.getFilesWithData().add(Starter.getFilesIO());
         }
     }
-
-
-/*
-    public static void readFiles() {
-        for (String file : Starter.getPathsIn()) {
-            ArrayList<String> sortableDataFromFile = new ArrayList<>();
-
-
-            try {
-                FileInputStream inputStream = new FileInputStream(file);
-                br = new BufferedReader(new InputStreamReader(inputStream, "cp1251"));
-            }
-            catch (FileNotFoundException e) {
-                System.out.println("Не удалось найти файл.");
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-
-            while (true) {
-                try {
-                    if (!br.ready()) break;
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                String data = null;
-                try {
-                    data = br.readLine();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                if (data == null) continue;
-
-                sortableDataFromFile.add(data);
-            }
-
-            Checker.updatingSortedDataInFile(sortableDataFromFile);
-
-            Starter.getFilesWithData().add(sortableDataFromFile);
-        }
-
-    }
-*/
 }

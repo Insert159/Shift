@@ -9,10 +9,11 @@ public class Main {
         Starter starter = new Starter();
         starter.fillStarter();
         DataMaker.createPaths();
+        DataMaker.createFiles();
         DataMaker.fillTheFiles();
-        NewReader.readTheFiles();
+//        NewReader.readTheFiles();
 //        NewReader.readFiles();
-        Merger.mergeSorting();
+//        Merger.mergeSorting();
         // TODO переопредели методы
         // TODO сделай описание каждому классу
         // TODO Readme, офрмление и тд
