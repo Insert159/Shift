@@ -2,19 +2,22 @@ package CFT;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 
+/**
+ * Класс Starter принимает через консоль данные приватного
+ * поля этого класса для создания входящих/исходящих
+ * папок и файлов, а также методы их сортировки и тип сохраняемых данных
+ */
 public class Starter {
     private static boolean sort;
     private static String type;
     private static String fileNameOut;
-    private static ArrayList<String> fileNameIn = new ArrayList<>();
-    private static ArrayList<String> pathsIn = new ArrayList<>();
+    private static final ArrayList<String> fileNameIn = new ArrayList<>();
+    private static final ArrayList<String> pathsIn = new ArrayList<>();
     private static String pathOut;
-    private static ArrayList<String> filesIO = new ArrayList<>(); //TODO нам нужна эта переменная?
-    private static ArrayList<ArrayList<String>> filesWithData = new ArrayList<>();
-    Scanner scanner; // TODO убери сканер, всё через БР
+    private static final ArrayList<String> filesIO = new ArrayList<>();
+    private static final ArrayList<ArrayList<String>> filesWithData = new ArrayList<>();
 
     public Starter() {
     }
@@ -32,33 +35,20 @@ public class Starter {
         return type;
     }
 
-    public void setType(String type) {
-        Starter.type = type;
-    }
-
     public static String getFileNameOut() {
         return fileNameOut;
     }
 
-    public void setFileNameOut(String fileNameOut) {
-        Starter.fileNameOut = fileNameOut;
-    }
 
     public static ArrayList<String> getFileNameIn() {
         return fileNameIn;
     }
 
-    public void setFileNameIn(ArrayList<String> fileNameIn) {
-        Starter.fileNameIn = fileNameIn;
-    }
 
     public static ArrayList<String> getPathsIn() {
         return pathsIn;
     }
 
-    public void setPathsIn(ArrayList<String> pathsIn) {
-        Starter.pathsIn = pathsIn;
-    }
 
     public static String getPathOut() {
         return pathOut;
@@ -72,60 +62,69 @@ public class Starter {
         return filesIO;
     }
 
-    public void setFilesIO(ArrayList<String> filesIO) {
-        Starter.filesIO = filesIO;
-    }
 
     public static ArrayList<ArrayList<String>> getFilesWithData() {
         return filesWithData;
     }
 
-    public void setFilesWithData(ArrayList<ArrayList<String>> filesWithData) {
-        Starter.filesWithData = filesWithData;
-    }
-
-    //TODO убери лишние геттеры\сеттеры
-
-
+    // Метод вызывает консоль и заполняет приватное поле класса
     public void fillStarter() {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-        System.out.println("Введите режим сортировки (\"a\" - возрастающая, по умолчанию; \"d\" - убывающая)");
         try {
-            String marker = bufferedReader.readLine();
-            if (marker.equals("a")) {
-                setSort(true);
+            boolean cycle = true;
+            System.out.println("Введите режим сортировки (\"a\"(ascending)- возрастающая, " +
+                    "по умолчанию(не обязательна к заполнению); \"d\" (descending)- убывающая)");
+            while (cycle) {
+                String marker = bufferedReader.readLine();
+                if (marker.equalsIgnoreCase("a")) {
+                    setSort(true);
+                    cycle = false;
+                } else if (marker.equalsIgnoreCase("d")) {
+                    System.out.println("Выбран режим сортировки \"по убыванию\"");
+                    cycle = false;
+                } else
+                    System.out.println("Неверный ввод данных, пожалуйста введите повторно.");
             }
-
         } catch (IOException e) {
             System.out.println("Не корретный формат ввода");
         }
-
-        System.out.println("Введите тип данных");
         try {
-            type = bufferedReader.readLine();
+            boolean cycle = true;
+            System.out.println("Введите тип данных для сортировки, " +
+                    "i - для целых чисел или s - для строк");
+            while (cycle) {
+                type = bufferedReader.readLine();
+                if (type.equalsIgnoreCase("i")) {
+                    System.out.println("Выбран формат целых чисел");
+                    cycle = false;
+                } else if (type.equalsIgnoreCase("s")) {
+                    System.out.println("Выбран формат строк");
+                    cycle = false;
+                } else System.out.println("Неверный ввод данных, пожалуйста введите повторно.");
+            }
         } catch (IOException e) {
-            System.out.println("Не корретный формат ввода");
+            System.out.println("Неверный формат ввода");
         }
 
-        System.out.println("Введите имя выходного файла");
+        System.out.println("Введите имя выходного файла (с учетом расширения файла)");
         try {
             fileNameOut = bufferedReader.readLine();
         } catch (IOException e) {
-            System.out.println("Не корретный формат ввода");
+            System.out.println("Неверный формат ввода");
         }
 
-        System.out.println("Введите имена входных файлов, после ввода всех файлов введите \"Enter\"");
+        System.out.println("Введите имена входных файлов (с учетом расширения файла), " +
+                "после ввода всех файлов введите \"quit\"");
         try {
             do {
                 String s = bufferedReader.readLine();
                 fileNameIn.add(s);
             }
-            while (!fileNameIn.contains("Enter"));
-            fileNameIn.remove("Enter"); // TODO это костыль
+            while (!fileNameIn.contains("quit"));
+            fileNameIn.remove("quit");
         } catch (IOException e) {
-            System.out.println("Не корретный формат ввода");
+            System.out.println("Неверный формат ввода");
         }
-
     }
 
 }

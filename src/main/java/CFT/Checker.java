@@ -2,6 +2,9 @@ package CFT;
 
 import java.util.List;
 
+/**
+ * Класс Checker проверяет предварительно отсортированны ли данные согласно условию
+ */
 public class Checker {
 
     public static void updatingSortedDataInFile(List<String> file) {
@@ -47,5 +50,4 @@ public class Checker {
         }
         return false;
     }
-// TODO по моему 3 метода об одном и том же
 }

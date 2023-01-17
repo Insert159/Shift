@@ -2,6 +2,10 @@ package CFT;
 
 import java.util.ArrayList;
 
+
+/**
+ * Класс Merger производит сортировку слиянием в выходной файл
+ */
 public class Merger {
     public static void mergeSorting() {
         while (Starter.getFilesWithData().size() > 1) {

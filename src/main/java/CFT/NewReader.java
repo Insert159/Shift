@@ -1,25 +1,14 @@
 package CFT;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Scanner;
-
-public class NewReader extends Reader {
-    public static BufferedReader br;  //TODO избавься от сканнера
-    @Override
-    public int read(char[] cbuf, int off, int len) throws IOException {
-        return 0;
-    }
-
-    @Override
-    public void close() throws IOException {
-    }
 
 
 
-// TODO тут что, 2 одинаковых метода?
-
-
+/**
+Класс NewReader считывает данные с входных вайлов и
+ записывает их в коллекцию filesIO
+ */
+public class NewReader {
 
     public static void readTheFiles() {
         System.out.println("Считываем данные с входных файлов...");
@@ -32,71 +21,31 @@ public class NewReader extends Reader {
                             try {
                                 Starter.getFilesIO().add(str);
                             } catch (NumberFormatException e) {
-                                System.out.println("Найдены недопустимые данные: " + str);
-                                System.out.println("Данные файла " + Starter.getFileNameIn().get(i) +
-                                        " отсортированы не будут");
-                                break; //TODO убери break
+                                System.out.println("Недопустимые значения данных: " + str);
+                                System.out.println("Данные " + Starter.getFileNameIn().get(i) +
+                                        " не будут отсортированы");
+                                break;
                             }
                         } else if (Starter.getType().equalsIgnoreCase("s")) {
                             String str = reader.readLine();
                             if (str.indexOf(" ") > 0) {
-                                System.out.println("Найдены недопустимые данные: " + str);
-                                System.out.println("Данные файла " + Starter.getFileNameIn().get(i) +
-                                        " отсортированы не будут");
-                                break; //TODO убери break
+                                System.out.println("Недопустимые значения данных: " + str);
+                                System.out.println("Данные " + Starter.getFileNameIn().get(i) +
+                                        " не будут отсортированы");
+                                break;
                             }
                             Starter.getFilesIO().add(str);
 
                         } else {
-                            System.out.println("Введен неверный формат типов данных");
+                            System.out.println("Неверный формат типов данных");
                         }
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
+            Checker.updatingSortedDataInFile(Starter.getFilesIO());
+            Starter.getFilesWithData().add(Starter.getFilesIO());
         }
-    }
-
-
-
-    public static void readFiles() {
-        for (String file : Starter.getPathsIn()) {
-            ArrayList<String> sortableDataFromFile = new ArrayList<>();
-
-
-            try {
-                FileInputStream inputStream = new FileInputStream(file);
-                br = new BufferedReader(new InputStreamReader(inputStream, "cp1251"));
-            }
-            catch (FileNotFoundException e) {
-                System.out.println("Не удалось найти файл.");
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-
-            while (true) {
-                try {
-                    if (!br.ready()) break;
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                String data = null;
-                try {
-                    data = br.readLine();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                if (data == null) continue;
-
-                sortableDataFromFile.add(data);
-            }
-
-            Checker.updatingSortedDataInFile(sortableDataFromFile);
-
-            Starter.getFilesWithData().add(sortableDataFromFile);
-        }
-
     }
 }
