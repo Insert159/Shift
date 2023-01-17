@@ -24,7 +24,7 @@ public class NewReader {
                                 System.out.println("Недопустимые значения данных: " + str);
                                 System.out.println("Данные " + Starter.getFileNameIn().get(i) +
                                         " не будут отсортированы");
-                                break; //TODO убери break
+                                break;
                             }
                         } else if (Starter.getType().equalsIgnoreCase("s")) {
                             String str = reader.readLine();
@@ -32,7 +32,7 @@ public class NewReader {
                                 System.out.println("Недопустимые значения данных: " + str);
                                 System.out.println("Данные " + Starter.getFileNameIn().get(i) +
                                         " не будут отсортированы");
-                                break; //TODO убери break
+                                break;
                             }
                             Starter.getFilesIO().add(str);
 

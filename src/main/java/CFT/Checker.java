@@ -50,5 +50,4 @@ public class Checker {
         }
         return false;
     }
-// TODO по моему 2 метода об одном и том же
 }

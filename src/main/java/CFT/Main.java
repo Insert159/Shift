@@ -13,9 +13,6 @@ public class Main {
         DataMaker.fillTheFiles();
         NewReader.readTheFiles();
         Merger.mergeSorting();
-        // TODO переопредели методы
-        // TODO сделай описание каждому классу
-        // TODO Readme, офрмление и тд
 
 
     }
