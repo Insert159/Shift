@@ -81,7 +81,7 @@ public class Merger {
             Starter.getFilesWithData().remove(sizeDataFromFiles - 1);
         }
 
-        NewWriter.writeFile(Starter.getFilesWithData().get(0), Starter.getFileNameOut());
+        NewWriter.writeFile(Starter.getFilesWithData().get(0), Starter.getPathOut());
 
         System.out.println("Сортировка слиянием произведена успешно.");
     }

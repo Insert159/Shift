@@ -21,7 +21,6 @@ public class Checker {
             }
         }
     }
-    //TODO неверные исключение при комбинировании цифр и строк. Обработай
 
     private static boolean checkSortedDataInFile(List<String> file, int currentIndex) {
         try {
@@ -43,7 +42,7 @@ public class Checker {
                 }
             }
         }
-        catch (IndexOutOfBoundsException e) {
+        catch (Exception e) {
             System.out.println("Выход за пределы массива. " +
                     "Указан неверный индекс для списка с данными.");
             System.exit(203);

@@ -8,10 +8,9 @@ public class NewWriter {
 
 
     public static void writeFile(List<String> sortedData, String fileName) {
-        File file = new File(fileName);
 
         try {
-            FileOutputStream fileOutputStream = new FileOutputStream(file);
+            FileOutputStream fileOutputStream = new FileOutputStream(fileName);
             for (String data : sortedData) {
                 fileOutputStream.write(data.getBytes(Charset.forName("cp1251")), 0, data.length());
                 fileOutputStream.write("\n".getBytes());
