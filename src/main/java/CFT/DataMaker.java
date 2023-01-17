@@ -27,6 +27,13 @@ public class DataMaker {
         } catch (IOException e) {
             System.out.println("Нет доступа к пути создания файлов");
         }
+
+        if (Starter.getPathsIn().size() < 2) {
+            System.out.println("Минимальный набор доступных входных " +
+                    "данных - 2 и более файла");
+            Starter.getPathsIn().clear();
+            System.exit(201);
+        }
     }
 
 
