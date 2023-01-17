@@ -7,8 +7,6 @@ import java.util.List;
 public class NewWriter {
 
 
-    //TODO переопредели методы
-
     public static void writeFile(List<String> sortedData, String fileName) {
         File file = new File(fileName);
 

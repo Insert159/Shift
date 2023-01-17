@@ -4,7 +4,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
+
 
 
 /**
@@ -83,17 +83,21 @@ public class DataMaker {
     // Метод fillTheFiles() наполняет исходящие файлы данными, принимая @param PathsIn
 // коллекцию путей исходящих файлоав
     public static void fillTheFiles() {
-        System.out.println("Введите входные данные:");
+        System.out.println("Введите входные данные. После окончания ввода данных, введите \"quit\"");
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
         for (String path : Starter.getPathsIn()) {
-            try (BufferedWriter bufferedWriter = Files.newBufferedWriter(Path.of(path), StandardCharsets.UTF_8)) {
+            try (BufferedWriter bufferedWriter = Files.newBufferedWriter(Path.of(path),
+                    StandardCharsets.UTF_8))
+            {
+                System.out.println("Начинаем запись в файл: " + path);
                 String line;
                 while (!"quit".equalsIgnoreCase(line = bufferedReader.readLine())) {
                     bufferedWriter.append(line);
                     bufferedWriter.append("\n");
                 }
             } catch (IOException e) {
-                System.err.println("Нет доступа к пути " + path); 
+                System.err.println("Нет доступа к пути " + path);
+                e.printStackTrace();
             }
         }
     }

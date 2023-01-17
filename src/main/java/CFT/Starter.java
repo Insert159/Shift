@@ -125,11 +125,6 @@ public class Starter {
         } catch (IOException e) {
             System.out.println("Неверный формат ввода");
         }
-        try {
-            bufferedReader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
 }

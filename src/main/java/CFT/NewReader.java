@@ -10,7 +10,6 @@ import java.io.*;
  */
 public class NewReader {
 
-
     public static void readTheFiles() {
         System.out.println("Считываем данные с входных файлов...");
         for (int i = 0; i < Starter.getPathsIn().size(); i++) {
@@ -22,23 +21,23 @@ public class NewReader {
                             try {
                                 Starter.getFilesIO().add(str);
                             } catch (NumberFormatException e) {
-                                System.out.println("Найдены недопустимые данные: " + str);
-                                System.out.println("Данные файла " + Starter.getFileNameIn().get(i) +
-                                        " отсортированы не будут");
+                                System.out.println("Недопустимые значения данных: " + str);
+                                System.out.println("Данные " + Starter.getFileNameIn().get(i) +
+                                        " не будут отсортированы");
                                 break; //TODO убери break
                             }
                         } else if (Starter.getType().equalsIgnoreCase("s")) {
                             String str = reader.readLine();
                             if (str.indexOf(" ") > 0) {
-                                System.out.println("Найдены недопустимые данные: " + str);
-                                System.out.println("Данные файла " + Starter.getFileNameIn().get(i) +
-                                        " отсортированы не будут");
+                                System.out.println("Недопустимые значения данных: " + str);
+                                System.out.println("Данные " + Starter.getFileNameIn().get(i) +
+                                        " не будут отсортированы");
                                 break; //TODO убери break
                             }
                             Starter.getFilesIO().add(str);
 
                         } else {
-                            System.out.println("Введен неверный формат типов данных");
+                            System.out.println("Неверный формат типов данных");
                         }
                     }
                 } catch (IOException e) {

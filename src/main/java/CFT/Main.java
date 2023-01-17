@@ -11,12 +11,12 @@ public class Main {
         DataMaker.createPaths();
         DataMaker.createFiles();
         DataMaker.fillTheFiles();
-//        NewReader.readTheFiles();
-//        NewReader.readFiles();
-//        Merger.mergeSorting();
+        NewReader.readTheFiles();
+        Merger.mergeSorting();
         // TODO переопредели методы
         // TODO сделай описание каждому классу
         // TODO Readme, офрмление и тд
+
 
     }
 }
