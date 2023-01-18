@@ -9,10 +9,10 @@ public class Main {
         Starter starter = new Starter();
         starter.fillStarter();
         DataMaker.createPaths();
-        DataMaker.createFiles();
         DataMaker.fillTheFiles();
         NewReader.readTheFiles();
         Merger.mergeSorting();
+        // TODO Через аргументы командной строки!!!!!
 
 
     }

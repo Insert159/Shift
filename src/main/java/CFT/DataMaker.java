@@ -4,7 +4,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-
+import java.nio.file.Paths;
 
 
 /**
@@ -13,65 +13,21 @@ import java.nio.file.Path;
  */
 public class DataMaker {
 
-    // Метод createPaths() создает пути, по которым создадутся файлы. В конце вызывет
-    // метод createFiles для создания файлов
+    // Метод createPaths() создает пути, по которым создадутся файлы и сами исходные файлы
     public static void createPaths() {
-
-        for (int i = 0; i < Starter.getFileNameIn().size(); i++) {
-            String strIn = "C:\\Users\\Anna\\OneDrive\\Рабочий стол\\Java\\Shift\\Shift\\" + Starter.getFileNameIn().get(i);
-            Starter.getPathsIn().add(strIn);
-        }
-
-        Starter.setPathOut("C:\\Users\\Anna\\OneDrive\\Рабочий стол\\Java\\Shift\\Shift\\" + Starter.getFileNameOut());
-        // TODO сделай универсальные пути
-
-    }
-
-    // Метод createFiles() создает файлы для чтения и записи. Вконце вызывает
-// метод fillTheFiles(), для заполнения исходящих файлов данными
-    public static void createFiles() {
-
-        // Создание/поиск выходного файла и проверка на запись в файл
-        File fileOutput = new File(Starter.getPathOut());
         try {
-            if (fileOutput.createNewFile()) {
-                System.out.println("Файл " + Starter.getFileNameOut() + " успешно создан");
-            } else {
-                System.out.println("Файл " + Starter.getFileNameOut() + " уже существует");
-                if (fileOutput.canWrite()) {
-                    System.out.println("Доступ на запись в файл есть. Информация будет перезаписана");
-                } else {
-                    System.out.println("Доступ на запись в файл отсутствует");
-                    Starter.getPathsIn().clear();
-                    System.exit(200);
-                }
+            Path dir = Files.createDirectories(Paths.get("path", "to", "files"));
+
+            for (int i = 0; i < Starter.getFileNameIn().size(); i++) {
+                String strIn = dir + "\\" + Starter.getFileNameIn().get(i);
+                Starter.getPathsIn().add(strIn);
             }
+            String strOut = dir + "\\" + Starter.getFileNameOut();
+            Starter.setPathOut(strOut);
         } catch (IOException e) {
-            System.out.println("Файл не найден");
+            System.out.println("Нет доступа к пути создания файлов");
         }
 
-        // Создание/поиск входного файла и проверка на чтение из файла
-        for (int i = 0; i < Starter.getPathsIn().size(); ) {
-            String filePathIn = Starter.getPathsIn().get(i);
-            File fileInput = new File(filePathIn);
-
-            try {
-                if (fileInput.createNewFile()) {
-                    System.out.println("Файл " + Starter.getFileNameIn().get(i) + " успешно создан");
-                } else {
-
-                    if (fileInput.canRead()) {
-                        System.out.println("Доступ на чтение из файла есть");
-                        i++;
-                    } else {
-                        System.out.println("Доступ на чтение из файла отсутствует. Файл будет удалён из списка");
-                        Starter.getPathsIn().remove(i);
-                    }
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
         if (Starter.getPathsIn().size() < 2) {
             System.out.println("Минимальный набор доступных входных " +
                     "данных - 2 и более файла");
@@ -80,15 +36,17 @@ public class DataMaker {
         }
     }
 
+
+
     // Метод fillTheFiles() наполняет исходящие файлы данными, принимая @param PathsIn
 // коллекцию путей исходящих файлоав
+
     public static void fillTheFiles() {
         System.out.println("Введите входные данные. После окончания ввода данных, введите \"quit\"");
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
         for (String path : Starter.getPathsIn()) {
             try (BufferedWriter bufferedWriter = Files.newBufferedWriter(Path.of(path),
-                    StandardCharsets.UTF_8))
-            {
+                    StandardCharsets.UTF_8)) {
                 System.out.println("Начинаем запись в файл: " + path);
                 String line;
                 while (!"quit".equalsIgnoreCase(line = bufferedReader.readLine())) {
